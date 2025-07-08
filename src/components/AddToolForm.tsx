@@ -1,7 +1,6 @@
-
 import { useState } from 'react';
 import { Plus, X } from 'lucide-react';
-import { Tool, categories } from '@/types/Tool';
+import { Tool, categories, operatingSystems } from '@/types/Tool';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -19,6 +18,7 @@ export const AddToolForm = ({ onAddTool, onCancel }: AddToolFormProps) => {
     name: '',
     description: '',
     category: '',
+    operatingSystem: '',
     downloadUrl: '',
     fileSize: '',
     version: '',
@@ -28,7 +28,7 @@ export const AddToolForm = ({ onAddTool, onCancel }: AddToolFormProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.description || !formData.category || !formData.downloadUrl) {
+    if (!formData.name || !formData.description || !formData.category || !formData.operatingSystem || !formData.downloadUrl) {
       return;
     }
     
@@ -37,6 +37,7 @@ export const AddToolForm = ({ onAddTool, onCancel }: AddToolFormProps) => {
       name: '',
       description: '',
       category: '',
+      operatingSystem: '',
       downloadUrl: '',
       fileSize: '',
       version: '',
@@ -105,6 +106,27 @@ export const AddToolForm = ({ onAddTool, onCancel }: AddToolFormProps) => {
                 </SelectContent>
               </Select>
             </div>
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Système d'exploitation *
+            </label>
+            <Select
+              value={formData.operatingSystem}
+              onValueChange={(value) => setFormData(prev => ({ ...prev, operatingSystem: value }))}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Sélectionner un OS" />
+              </SelectTrigger>
+              <SelectContent>
+                {operatingSystems.map((os) => (
+                  <SelectItem key={os} value={os}>
+                    {os}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           
           <div>
