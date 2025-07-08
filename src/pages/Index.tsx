@@ -1,19 +1,21 @@
 
 import { useState } from 'react';
-import { Plus, Wrench, Package } from 'lucide-react';
+import { Plus, Wrench, Package, LogIn } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Tool } from '@/types/Tool';
 import { ToolCard } from '@/components/ToolCard';
 import { AddToolForm } from '@/components/AddToolForm';
 import { SearchAndFilter } from '@/components/SearchAndFilter';
 import { Button } from '@/components/ui/button';
 
-// Données d'exemple
+// Données d'exemple mises à jour avec operatingSystem
 const sampleTools: Tool[] = [
   {
     id: '1',
     name: 'Visual Studio Code',
     description: 'Éditeur de code source léger mais puissant qui fonctionne sur votre bureau',
     category: 'Développement',
+    operatingSystem: 'Multiplateforme',
     downloadUrl: 'https://code.visualstudio.com/download',
     fileSize: '95 MB',
     version: '1.85.0',
@@ -25,6 +27,7 @@ const sampleTools: Tool[] = [
     name: 'Figma',
     description: 'Outil de design collaboratif pour créer des interfaces utilisateur',
     category: 'Design',
+    operatingSystem: 'Web',
     downloadUrl: 'https://www.figma.com/downloads/',
     fileSize: '120 MB',
     version: '116.5.0',
@@ -36,6 +39,7 @@ const sampleTools: Tool[] = [
     name: 'Notion',
     description: 'Espace de travail tout-en-un pour notes, tâches, wikis et bases de données',
     category: 'Productivité',
+    operatingSystem: 'Multiplateforme',
     downloadUrl: 'https://www.notion.so/desktop',
     fileSize: '140 MB',
     version: '2.1.0',
@@ -49,6 +53,7 @@ const Index = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedOS, setSelectedOS] = useState('all');
 
   const handleAddTool = (newTool: Omit<Tool, 'id' | 'createdAt'>) => {
     const tool: Tool = {
@@ -66,8 +71,9 @@ const Index = () => {
                          tool.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     
     const matchesCategory = selectedCategory === 'all' || tool.category === selectedCategory;
+    const matchesOS = selectedOS === 'all' || tool.operatingSystem === selectedOS;
     
-    return matchesSearch && matchesCategory;
+    return matchesSearch && matchesCategory && matchesOS;
   });
 
   if (showAddForm) {
@@ -99,13 +105,21 @@ const Index = () => {
               </div>
             </div>
             
-            <Button
-              onClick={() => setShowAddForm(true)}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Ajouter un outil
-            </Button>
+            <div className="flex items-center gap-3">
+              <Link to="/login">
+                <Button variant="outline" className="text-blue-600 border-blue-600 hover:bg-blue-50">
+                  <LogIn className="w-4 h-4 mr-2" />
+                  Connexion
+                </Button>
+              </Link>
+              <Button
+                onClick={() => setShowAddForm(true)}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Ajouter un outil
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -118,6 +132,8 @@ const Index = () => {
           onSearchChange={setSearchTerm}
           selectedCategory={selectedCategory}
           onCategoryChange={setSelectedCategory}
+          selectedOS={selectedOS}
+          onOSChange={setSelectedOS}
         />
 
         {/* Stats */}
@@ -125,7 +141,7 @@ const Index = () => {
           <Package className="w-4 h-4" />
           <span className="text-sm">
             {filteredTools.length} outil{filteredTools.length > 1 ? 's' : ''} 
-            {searchTerm || selectedCategory !== 'all' ? ' trouvé(s)' : ' au total'}
+            {searchTerm || selectedCategory !== 'all' || selectedOS !== 'all' ? ' trouvé(s)' : ' au total'}
           </span>
         </div>
 
@@ -140,18 +156,18 @@ const Index = () => {
           <div className="text-center py-12">
             <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              {searchTerm || selectedCategory !== 'all' 
+              {searchTerm || selectedCategory !== 'all' || selectedOS !== 'all'
                 ? 'Aucun outil trouvé' 
                 : 'Aucun outil disponible'
               }
             </h3>
             <p className="text-gray-600 mb-4">
-              {searchTerm || selectedCategory !== 'all'
+              {searchTerm || selectedCategory !== 'all' || selectedOS !== 'all'
                 ? 'Essayez de modifier vos critères de recherche'
                 : 'Commencez par ajouter votre premier outil'
               }
             </p>
-            {!searchTerm && selectedCategory === 'all' && (
+            {!searchTerm && selectedCategory === 'all' && selectedOS === 'all' && (
               <Button
                 onClick={() => setShowAddForm(true)}
                 className="bg-blue-600 hover:bg-blue-700 text-white"

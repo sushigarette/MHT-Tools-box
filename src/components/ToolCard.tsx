@@ -1,5 +1,5 @@
 
-import { Download, Calendar, Tag } from 'lucide-react';
+import { Download, Calendar, Tag, Monitor } from 'lucide-react';
 import { Tool } from '@/types/Tool';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -17,6 +17,16 @@ const categoryColors: Record<string, string> = {
   'Multimédia': 'bg-pink-500',
   'Sécurité': 'bg-red-500',
   'Autre': 'bg-gray-500',
+};
+
+const osColors: Record<string, string> = {
+  'Windows': 'bg-blue-600',
+  'macOS': 'bg-gray-600',
+  'Linux': 'bg-yellow-600',
+  'Android': 'bg-green-600',
+  'iOS': 'bg-gray-700',
+  'Web': 'bg-purple-600',
+  'Multiplateforme': 'bg-indigo-600',
 };
 
 export const ToolCard = ({ tool }: ToolCardProps) => {
@@ -38,11 +48,19 @@ export const ToolCard = ({ tool }: ToolCardProps) => {
               {tool.description}
             </CardDescription>
           </div>
-          <Badge 
-            className={`${categoryColors[tool.category] || categoryColors['Autre']} text-white`}
-          >
-            {tool.category}
-          </Badge>
+          <div className="flex flex-col gap-2">
+            <Badge 
+              className={`${categoryColors[tool.category] || categoryColors['Autre']} text-white`}
+            >
+              {tool.category}
+            </Badge>
+            <Badge 
+              className={`${osColors[tool.operatingSystem] || osColors['Multiplateforme']} text-white`}
+            >
+              <Monitor className="w-3 h-3 mr-1" />
+              {tool.operatingSystem}
+            </Badge>
+          </div>
         </div>
       </CardHeader>
       

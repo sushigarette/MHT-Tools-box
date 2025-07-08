@@ -1,6 +1,6 @@
 
-import { Search, Filter } from 'lucide-react';
-import { categories } from '@/types/Tool';
+import { Search, Filter, Monitor } from 'lucide-react';
+import { categories, operatingSystems } from '@/types/Tool';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
@@ -9,6 +9,8 @@ interface SearchAndFilterProps {
   onSearchChange: (term: string) => void;
   selectedCategory: string;
   onCategoryChange: (category: string) => void;
+  selectedOS: string;
+  onOSChange: (os: string) => void;
 }
 
 export const SearchAndFilter = ({
@@ -16,6 +18,8 @@ export const SearchAndFilter = ({
   onSearchChange,
   selectedCategory,
   onCategoryChange,
+  selectedOS,
+  onOSChange,
 }: SearchAndFilterProps) => {
   return (
     <div className="flex flex-col sm:flex-row gap-4 mb-8">
@@ -40,6 +44,23 @@ export const SearchAndFilter = ({
             {categories.map((category) => (
               <SelectItem key={category} value={category}>
                 {category}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="sm:w-48">
+        <Select value={selectedOS} onValueChange={onOSChange}>
+          <SelectTrigger>
+            <Monitor className="w-4 h-4 mr-2" />
+            <SelectValue placeholder="Tous les OS" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Tous les OS</SelectItem>
+            {operatingSystems.map((os) => (
+              <SelectItem key={os} value={os}>
+                {os}
               </SelectItem>
             ))}
           </SelectContent>

@@ -4,6 +4,7 @@ export interface Tool {
   name: string;
   description: string;
   category: string;
+  operatingSystem: string;
   downloadUrl: string;
   fileSize?: string;
   version?: string;
@@ -21,4 +22,15 @@ export const categories = [
   'Autre'
 ] as const;
 
+export const operatingSystems = [
+  'Windows',
+  'macOS',
+  'Linux',
+  'Android',
+  'iOS',
+  'Web',
+  'Multiplateforme'
+] as const;
+
 export type Category = typeof categories[number];
+export type OperatingSystem = typeof operatingSystems[number];
